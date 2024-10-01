@@ -8,7 +8,7 @@
     <maven.compiler.target>1.8</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <junit.version>5.6.0</junit.version>
-    <!--
+    <!-- maven-enforcer fails, removed.
     <maven-enforcer-plugin.version>3.0.0-M3</maven-enforcer-plugin.version>
     -->
     <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
@@ -37,28 +37,6 @@
   </dependencies>
   <build>
     <plugins>
-    <!-- 
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-enforcer-plugin</artifactId>
-        <version>${maven-enforcer-plugin.version}</version>
-        <executions>
-          <execution>
-            <goals>
-              <goal>enforce</goal>
-            </goals>
-            <configuration>
-              <rules>
-                <requireMavenVersion>
-                  <version>3.6.3</version>
-                </requireMavenVersion>
-              </rules>
-              <fail>true</fail>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-    -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
@@ -86,69 +64,4 @@
       </plugin>
     </plugins>
   </build>
-
- <!-- this seems kind useless but by default openshift asks for it -->
-  <profiles>
-   <!--
-   <profile>
-    <id>openshift</id>
-    <build>
-      <plugins>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-enforcer-plugin</artifactId>
-          <version>3.0.0-M3</version>
-          <executions>
-            <execution>
-              <id>enforce-files-exist</id>
-              <goals>
-                <goal>enforce</goal>
-              </goals>
-              <configuration>
-                <rules>
-                  <requireFilesExist>
-                    <files>
-                      <file>${project.build.outputDirectory}</file>
-                    </files>
-                  </requireFilesExist>
-                </rules>
-                <fail>true</fail>
-              </configuration>
-            </execution>
-          </executions>
-        </plugin>
-      </plugins>
-    </build>
-   </profile>
-   -->
-
-<!-- 
-      <profile>
-        <id>openshift</id>
-        <build>
-            <plugins>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-assembly-plugin</artifactId>
-                    <version>3.3.0</version>
-                    <executions>
-                        <execution>
-                            <phase>package</phase>
-                            <goals>
-                                <goal>single</goal>
-                            </goals>
-                            <configuration>
-                                <descriptorRefs>
-                                    <descriptorRef>jar-with-dependencies</descriptorRef>
-                                </descriptorRefs>
-                            </configuration>
-                        </execution>
-                    </executions>
-                </plugin>
-            </plugins>
-        </build>
-      </profile>
--->
-
-  </profiles>
 </project>
