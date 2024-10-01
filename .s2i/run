@@ -1,4 +1,4 @@
 #!/bin/bash
 echo "Starting application..."
 # exec java $JAVA_OPTS -jar app.jar $APP_ARGS
-exec java -cp ".\logwatcher.jar" gov.hibc.logwatcher.App test
+exec java -cp ".\logwatcher.jar" gov.hibc.logwatcher.App
