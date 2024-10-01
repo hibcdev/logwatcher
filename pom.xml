@@ -84,6 +84,7 @@
 
  <!-- this seems kind useless but by default openshift asks for it -->
   <profiles>
+   <!--
    <profile>
     <id>openshift</id>
     <build>
@@ -114,5 +115,36 @@
       </plugins>
     </build>
    </profile>
+   -->
+
+       <profile>
+        <id>openshift</id>
+        <build>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-assembly-plugin</artifactId>
+                    <version>3.3.0</version>
+                    <executions>
+                        <execution>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>single</goal>
+                            </goals>
+                            <configuration>
+                                <descriptorRefs>
+                                    <descriptorRef>jar-with-dependencies</descriptorRef>
+                                </descriptorRefs>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </build>
+    </profile>
+
+
+
+
   </profiles>
 </project>
