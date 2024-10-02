@@ -1,0 +1,1 @@
+Main-Class: gov.hibc.logwatcher.App

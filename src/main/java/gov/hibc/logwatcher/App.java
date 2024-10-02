@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.Instant;
 import java.util.HashMap;
+import org.apache.log4j.Logger;
 import okhttp3.*;
 
 public class App {
@@ -18,42 +19,43 @@ public class App {
     static String files = System.getenv("LogFiles");
     static String testing = System.getenv("Testing"); // any value
 
-    // input args can be 1 of the following 3 options:
-    // - just the word "test" (requires env vars DynatraceUrl and DynatraceToken)
-    // - a single argument which is a comma separated list of logs (requires env vars DynatraceUrl and DynatraceToken)
-    // - 3 arguments
-    //      0) dynatrace url
-    //      1) dynatrace token
-    //      2) list of logs
+    static final Logger logger = Logger.getLogger(App.class);
+
     public static void main(String[] args) throws Exception {
-        if (url == null) System.out.println("Env variable DynatraceUrl not found");
-        if (token == null) System.out.println("Env variable DynatraceToken not found");
-        if (files == null) System.out.println("Env variable LogFiles not found");
+        logger.info("log watcher startup with " + args.length + " arg(s)");
+        if (args.length == 2)
+        {
+            // assume this is a test
+            url = args[0];
+            token = args[1];
+            new App("placeholder").test();
+        }
+        else
+            mainWithEnvVars(args);
+    }
+
+    public static void mainWithEnvVars(String[] args) throws Exception {
+        if (url == null) logger.error("Env variable DynatraceUrl not found");
+        if (token == null) logger.error("Env variable DynatraceToken not found");
+        if (files == null) logger.error("Env variable LogFiles not found");
 
         if (url == null || token == null)
         {
-            System.out.println("Url (" + url + ") and Token (" + token + ") are required");
-            return;
-        }
-
-        if (testing != null)
-        {
-            new App("placeholder").test();
+            logger.info("Url (" + url + ") and Token (" + token + ") are required");
             return;
         }
 
         if (files == null) 
         {
-            System.out.println("LogFiles is required");
+            logger.error("LogFiles is required");
             return;
         }
 
-        System.out.println("LogFiles: " + files);
+        logger.info("LogFiles: " + files);
         new App(files).monitor();
     }
 
     App(String filearg) {
-        System.out.println("pooper: " + filearg);
         String[] files = filearg.split(",");
         for (String file : files) {
             mfiles.put(file, 0L);
@@ -63,7 +65,7 @@ public class App {
     void test() throws Exception {
         String log = Instant.now().toString() + " test only...";
         int response = post(log);
-        System.out.println("Post response code: " + response);
+        logger.info("Post response code: " + response);
     }
 
     void monitor() {
@@ -80,7 +82,7 @@ public class App {
                 break;
             } 
             catch (Exception e) {
-                System.err.println("Error processing file: " + e.getMessage());
+                logger.error("Error processing file: " + e.getMessage());
             }
         }
     }
@@ -88,28 +90,25 @@ public class App {
     private void processFile(String filePath, long lastpos) {
         try (RandomAccessFile file = new RandomAccessFile(filePath, "r")) {
             long fileLength = file.length();
-            System.out.println("processFile: " + filePath + " length: " + fileLength);
-
             if (fileLength > lastpos) {
                 file.seek(lastpos);
                 String line;
                 while ((line = file.readLine()) != null) {
                     if (line.length() > 0) {
-                        System.out.println(line);
                         int response = post(line);
                         if (response > 399)
-                            System.out.println("Response code " + response);
+                            logger.error("Response code " + response);
                         mfiles.put(filePath, file.getFilePointer());
                     }
                 }
             } 
             else if (fileLength < lastpos) {
-                System.out.println("File was truncated or rotated. Resetting position.");
+                logger.info("File was truncated or rotated. Resetting position.");
                 mfiles.put(filePath, 0L);
             }
         } 
         catch (Exception e) {
-            System.err.println("Error reading file: " + e.getMessage());
+            logger.error("Error reading file: " + filePath + " " + e.getMessage());
         }
     }
 
