@@ -25,42 +25,34 @@
    <build>
       <plugins>
 
-         <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-assembly-plugin</artifactId>
-            <version>3.4.2</version>
-            <executions>
-               <execution>
-                  <phase>package</phase>
-                  <goals>
-                     <goal>single</goal>
-                  </goals>
-                  <configuration>
-                     <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                     </descriptorRefs>
-                     <finalName>logwatcher</finalName>
-                     <appendAssemblyId>false</appendAssemblyId>
-                  </configuration>
-               </execution>
-            </executions>
-         </plugin>
 
-<!-- 
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-jar-plugin</artifactId>
-            <version>3.2.0</version>
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-assembly-plugin</artifactId>
+    <version>3.4.2</version>
+    <executions>
+        <execution>
+            <phase>package</phase>
+            <goals>
+                <goal>single</goal>
+            </goals>
             <configuration>
+                <descriptorRefs>
+                    <descriptorRef>jar-with-dependencies</descriptorRef>
+                </descriptorRefs>
+                <finalName>${project.artifactId}</finalName>
+                <appendAssemblyId>false</appendAssemblyId>
                 <archive>
                     <manifest>
-                        <addClasspath>true</addClasspath>
                         <mainClass>gov.hibc.logwatcher.App</mainClass>
                     </manifest>
                 </archive>
+                <attach>false</attach>
             </configuration>
-        </plugin>
--->
+        </execution>
+    </executions>
+</plugin>
+
 
       </plugins>
       <finalName>logwatcher</finalName>
