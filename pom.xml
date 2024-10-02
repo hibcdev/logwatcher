@@ -24,6 +24,7 @@
    </dependencies>
    <build>
       <plugins>
+
          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-assembly-plugin</artifactId>
@@ -44,6 +45,19 @@
                </execution>
             </executions>
          </plugin>
+
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-jar-plugin</artifactId>
+            <configuration>
+                <archive>
+                    <manifest>
+                        <mainClass>gov.hibc.logwatcher.App</mainClass>
+                    </manifest>
+                </archive>
+            </configuration>
+        </plugin>
+
       </plugins>
       <finalName>logwatcher</finalName>
    </build>
