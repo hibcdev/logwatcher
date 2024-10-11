@@ -9,6 +9,9 @@ import java.util.HashMap;
 import org.apache.log4j.Logger;
 import okhttp3.*;
 
+/* 
+ * TODO if the 'path' no longer exists remove the filename from mfiles; also rename mfiles
+ */
 public class App {
     final MediaType TEXT = MediaType.get("text/plain; charset=utf-8");
 
